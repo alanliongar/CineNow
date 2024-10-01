@@ -1,14 +1,14 @@
-package com.devspacecinenow
+package com.devspacecinenow.common.data
 
-import android.util.Log
+import com.devspacecinenow.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitClient {
+private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
 
-    private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
+object RetrofitClient {
 
     private val httpClient: OkHttpClient
         get() {
