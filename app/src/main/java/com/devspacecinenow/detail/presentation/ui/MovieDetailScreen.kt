@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,9 +31,18 @@ import com.devspacecinenow.ui.theme.CineNowTheme
 
 
 @Composable
-fun MovieDetailScreen(movieId: String, navHostController: NavHostController, detailViewModel: MovieDetailViewModel) {
+fun MovieDetailScreen(
+    movieId: String,
+    navHostController: NavHostController,
+    detailViewModel: MovieDetailViewModel
+) {
     val movieDto by detailViewModel.uiMovieDetail.collectAsState()
     detailViewModel.fetchMovieDetail(movieId)
+    DisposableEffect(Unit) {
+        onDispose {
+            detailViewModel.cleanMovieID()
+        }
+    }
 
     movieDto?.let {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -41,7 +51,6 @@ fun MovieDetailScreen(movieId: String, navHostController: NavHostController, det
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = {
-                    detailViewModel.cleanMovieID()
                     navHostController.popBackStack()
                 }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Voltar")
@@ -76,6 +85,7 @@ fun MovieDetailScreen(movieId: String, navHostController: NavHostController, det
             }
         }
     }
+
 }
 
 /*@Composable
@@ -97,6 +107,6 @@ fun MovieDetailPreview() {
                     "overview Movie ",
             postPath = "dshaufusahd",
         )
-       // MovieDetailContent(movie)
+        // MovieDetailContent(movie)
     }
 }

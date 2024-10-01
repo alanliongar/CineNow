@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.data.DetailService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,24 +25,19 @@ class MovieDetailViewModel(
 
     fun fetchMovieDetail(movieId: String) {
         if (_uiMovieDetail.value == null) {
-            detailService.getMovieById(movieId).enqueue(object : Callback<MovieDto> {
-                override fun onResponse(call: Call<MovieDto>, response: Response<MovieDto>) {
-                    if (response.isSuccessful) {
-                        val movie = response.body()
-                        if (movie != null) {
-                            _uiMovieDetail.value = movie
-                        }
-                    } else {
-                        Log.d("MainActivity", "Request Error :: ${response.errorBody()}")
-                    }
+        viewModelScope.launch(Dispatchers.IO){
+            val response = detailService.getMovieById(movieId)
+            if (response.isSuccessful) {
+                val movie = response.body()
+                if (movie != null) {
+                    _uiMovieDetail.value = movie
                 }
-
-                override fun onFailure(call: Call<MovieDto>, t: Throwable) {
-                    Log.d("MainActivity", "Network Error :: ${t.message}")
-                }
-            })
+            } else {
+                Log.d("MovieDetailViewModel", "Request Error :: ${response.errorBody()}")
+            }
+        }
         } else {
-
+            Log.d("MovieDetailViewModel", "Ja tem um valor lá dentro")
         }
     }
 
