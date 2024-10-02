@@ -4,17 +4,19 @@ import com.devspacecinenow.common.model.MovieResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
-
+import retrofit2.http.Path
+import retrofit2.http.Query
+/*&page={page}*/
 interface ListService {
-    @GET("now_playing?language=pt-BR&page=1")
-    suspend fun getNowPlayingMovies(): Response<MovieResponse>
+    @GET("now_playing?language=pt-BR")
+    suspend fun getNowPlayingMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("popular?language=pt-BR&page=1")
-    suspend fun getPopularMovies(): Response<MovieResponse>
+    @GET("popular?language=pt-BR")
+    suspend fun getPopularMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("top_rated?language=pt-BR&page=1")
-    suspend fun getTopRatedMovies(): Response<MovieResponse>
+    @GET("top_rated?language=pt-BR")
+    suspend fun getTopRatedMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("upcoming?language=pt-BR&page=1")
-    suspend fun getUpcomingMovies(): Response<MovieResponse>
+    @GET("upcoming?language=pt-BR")
+    suspend fun getUpcomingMovies(@Query("page") page: Int): Response<MovieResponse>
 }
