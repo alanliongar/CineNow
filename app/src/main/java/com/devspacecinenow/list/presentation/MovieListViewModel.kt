@@ -16,6 +16,11 @@ class MovieListViewModel(
     private val listService: ListService
 ) : ViewModel() {
 
+    private var currentPageNowPlaying: Int = 1
+    private var currentPageUpcoming: Int = 1
+    private var currentPageTopRated: Int = 1
+    private var currentPagePopular: Int = 1
+
     private val _uiNowPlaying = MutableStateFlow<List<MovieDto>>(emptyList())
     private val _uiUpComingMovies = MutableStateFlow<List<MovieDto>>(emptyList())
     private val _uiTopRatedMovies = MutableStateFlow<List<MovieDto>>(emptyList())
@@ -40,11 +45,12 @@ class MovieListViewModel(
 
     private fun fetchNowPlayingMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = listService.getNowPlayingMovies()
+            val response = listService.getNowPlayingMovies(currentPageNowPlaying)
             if (response.isSuccessful) {
+                currentPageNowPlaying++
                 val movies = response.body()?.results
                 if (movies != null) {
-                    _uiNowPlaying.value = movies
+                    _uiNowPlaying.value = _uiNowPlaying.value + movies
                 }
             } else {
                 Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
@@ -54,11 +60,12 @@ class MovieListViewModel(
 
     private fun fetchUpcomingMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = listService.getUpcomingMovies()
+            val response = listService.getUpcomingMovies(currentPageUpcoming)
             if (response.isSuccessful) {
+                currentPageUpcoming++
                 val movies = response.body()?.results
                 if (movies != null) {
-                    _uiUpComingMovies.value = movies
+                    _uiUpComingMovies.value = _uiUpComingMovies.value + movies
                 }
             } else {
                 Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
@@ -68,11 +75,12 @@ class MovieListViewModel(
 
     private fun fetchTopRatedMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = listService.getTopRatedMovies()
+            val response = listService.getTopRatedMovies(currentPageTopRated)
             if (response.isSuccessful) {
+                currentPageTopRated++
                 val movies = response.body()?.results
                 if (movies != null) {
-                    _uiTopRatedMovies.value = movies
+                    _uiTopRatedMovies.value = _uiTopRatedMovies.value + movies
                 }
             } else {
                 Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
@@ -82,17 +90,36 @@ class MovieListViewModel(
 
     private fun fetchPopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = listService.getPopularMovies()
+            val response = listService.getPopularMovies(currentPagePopular)
             if (response.isSuccessful) {
+                currentPagePopular++
                 val movies = response.body()?.results
                 if (movies != null) {
-                    _uiPopularMovies.value = movies
+                    _uiPopularMovies.value = _uiPopularMovies.value + movies
                 }
             } else {
                 Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
             }
         }
     }
+
+
+    fun loadMoreTopRated() {
+        fetchTopRatedMovies()
+    }
+
+    fun loadMoreUpcoming() {
+        fetchUpcomingMovies()
+    }
+
+    fun loadMoreNowPlaying() {
+        fetchNowPlayingMovies()
+    }
+
+    fun loadMorePopular() {
+        fetchPopularMovies()
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
