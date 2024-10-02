@@ -1,5 +1,6 @@
 package com.devspacecinenow.list.presentation
 
+import android.graphics.Movie
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.devspacecinenow.common.data.RetrofitClient
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.list.data.ListService
+import com.devspacecinenow.list.presentation.ui.MovieListUiState
+import com.devspacecinenow.list.presentation.ui.MovieUiData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MovieListViewModel(
     private val listService: ListService
@@ -21,12 +25,12 @@ class MovieListViewModel(
     private var currentPageTopRated: Int = 1
     private var currentPagePopular: Int = 1
 
-    private val _uiNowPlaying = MutableStateFlow<List<MovieDto>>(emptyList())
+    private val _uiNowPlaying = MutableStateFlow<MovieListUiState>(MovieListUiState())
     private val _uiUpComingMovies = MutableStateFlow<List<MovieDto>>(emptyList())
     private val _uiTopRatedMovies = MutableStateFlow<List<MovieDto>>(emptyList())
     private val _uiPopularMovies = MutableStateFlow<List<MovieDto>>(emptyList())
 
-    val uiNowPlaying: StateFlow<List<MovieDto>> = _uiNowPlaying
+    val uiNowPlaying: StateFlow<MovieListUiState> = _uiNowPlaying
     val uiUpComingMovies: StateFlow<List<MovieDto>> = _uiUpComingMovies
     val TopRatedMovies: StateFlow<List<MovieDto>> = _uiTopRatedMovies
     val PopularMovies: StateFlow<List<MovieDto>> = _uiPopularMovies
@@ -36,24 +40,45 @@ class MovieListViewModel(
         //chamada dos nowplaying
         fetchNowPlayingMovies()
         //chamada do upcoming
-        fetchUpcomingMovies()
+        //fetchUpcomingMovies()
         //chamada do topRated
-        fetchTopRatedMovies()
+        //fetchTopRatedMovies()
         //chamada do popular
-        fetchPopularMovies()
+        //fetchPopularMovies()
     }
 
     private fun fetchNowPlayingMovies() {
+        _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
-            val response = listService.getNowPlayingMovies(currentPageNowPlaying)
-            if (response.isSuccessful) {
-                currentPageNowPlaying++
-                val movies = response.body()?.results
-                if (movies != null) {
-                    _uiNowPlaying.value = _uiNowPlaying.value + movies
+            try {
+                val response = listService.getNowPlayingMovies(currentPageNowPlaying)
+                if (response.isSuccessful) {
+                    currentPageNowPlaying++
+                    val movies = response.body()?.results
+                    if (movies != null) {
+                        val movieUiDataList = movies.map { movieDto ->
+                            MovieUiData(
+                                id = movieDto.id,
+                                title = movieDto.title,
+                                overview = movieDto.overview,
+                                image = movieDto.posterFullPath
+                            )
+                        }
+                        _uiNowPlaying.value = _uiNowPlaying.value.copy(
+                            list = _uiNowPlaying.value.list + movieUiDataList,
+                            isLoading = false, isError = false
+                        )
+                    }
+                } else {
+                    _uiNowPlaying.value =
+                        _uiNowPlaying.value.copy(isError = true, isLoading = false)
+                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
                 }
-            } else {
-                Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                _uiNowPlaying.value = _uiNowPlaying.value.copy(isError = true, isLoading = false)
+                currentPageNowPlaying = 1
             }
         }
     }
