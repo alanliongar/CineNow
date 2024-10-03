@@ -59,10 +59,10 @@ fun MovieListScreen(navController: NavHostController, viewModel: MovieListViewMo
 
 @Composable
 fun MovieListContent(
-    topRatedMovies: List<MovieDto>,
-    upcomingMovies: List<MovieDto>,
+    topRatedMovies: MovieListUiState,
+    upcomingMovies: MovieListUiState,
     nowPlayingMovies: MovieListUiState,
-    popularMovies: List<MovieDto>,
+    popularMovies: MovieListUiState,
     loadMoreTopRated: () -> Unit,
     loadMoreUpcoming: () -> Unit,
     loadMoreNowPlaying: () -> Unit,
@@ -86,27 +86,27 @@ fun MovieListContent(
             onClick = onClick,
             loadMore = loadMoreNowPlaying
         )
-        /* Spacer(modifier = Modifier.size(15.dp))
-         MovieSession(
-             "Em breve lançará",
-             upcomingMovies,
-             onClick = onClick,
-             loadMore = loadMoreUpcoming
-         )
-         Spacer(modifier = Modifier.size(15.dp))
-         MovieSession(
-             "Mais aclamados",
-             topRatedMovies,
-             onClick = onClick,
-             loadMore = loadMoreTopRated
-         )
-         Spacer(modifier = Modifier.size(15.dp))
-         MovieSession(
-             "Mais populares",
-             popularMovies,
-             onClick = onClick,
-             loadMore = loadMorePopular
-         )*/
+        Spacer(modifier = Modifier.size(15.dp))
+        MovieSession(
+            "Em breve lançará",
+            upcomingMovies,
+            onClick = onClick,
+            loadMore = loadMoreUpcoming
+        )
+        Spacer(modifier = Modifier.size(15.dp))
+        MovieSession(
+            "Mais aclamados",
+            topRatedMovies,
+            onClick = onClick,
+            loadMore = loadMoreTopRated
+        )
+        Spacer(modifier = Modifier.size(15.dp))
+        MovieSession(
+            "Mais populares",
+            popularMovies,
+            onClick = onClick,
+            loadMore = loadMorePopular
+        )
     }
 }
 
@@ -135,7 +135,7 @@ private fun MovieSession(
         if (movieListUiState.isLoading) {
             Text(color = Color.Green, text = "CARREGANDO")
         } else if (movieListUiState.isError) {
-            Text(color = Color.Red, text = "Alguma coisa deu errado")
+            Text(color = Color.Red, text = movieListUiState.errorMessage ?: "")
         } else {
             MovieList(movieList = movieListUiState.list, onClick = onClick, loadMore = loadMore)
         }
