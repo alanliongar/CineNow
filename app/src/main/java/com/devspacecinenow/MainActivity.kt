@@ -71,4 +71,4 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//2h estudadas
+//2h estudadas+2h
