@@ -133,9 +133,13 @@ private fun MovieSession(
         Text(fontSize = 24.sp, text = label, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.size(8.dp))
         if (movieListUiState.isLoading) {
-            Text(color = Color.Green, text = "CARREGANDO")
+            Text(color = Color.Green, text = "CARREGANDO", fontWeight = FontWeight.SemiBold)
         } else if (movieListUiState.isError) {
-            Text(color = Color.Red, text = movieListUiState.errorMessage ?: "")
+            Text(
+                color = Color.Red,
+                text = movieListUiState.errorMessage ?: "",
+                fontWeight = FontWeight.SemiBold
+            )
         } else {
             MovieList(movieList = movieListUiState.list, onClick = onClick, loadMore = loadMore)
         }
