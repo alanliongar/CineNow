@@ -1,10 +1,8 @@
-package com.devspacecinenow.list.data
+package com.devspacecinenow.list.data.remote
 
 import com.devspacecinenow.common.model.MovieResponse
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 /*&page={page}*/
 interface ListService {

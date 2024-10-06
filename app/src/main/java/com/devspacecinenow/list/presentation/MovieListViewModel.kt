@@ -1,24 +1,23 @@
 package com.devspacecinenow.list.presentation
 
-import android.graphics.Movie
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.devspacecinenow.common.data.RetrofitClient
-import com.devspacecinenow.common.model.MovieDto
-import com.devspacecinenow.list.data.ListService
+import com.devspacecinenow.CineNowApplication
+import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
 class MovieListViewModel(
-    private val listService: ListService
+    private val repository: MovieListRepository
 ) : ViewModel() {
 
     private var currentPageNowPlaying: Int = 1
@@ -51,45 +50,43 @@ class MovieListViewModel(
     private fun fetchNowPlayingMovies() {
         _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = listService.getNowPlayingMovies(currentPageNowPlaying)
-                if (response.isSuccessful) {
-                    currentPageNowPlaying++
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        val movieUiDataList = movies.map { movieDto ->
-                            MovieUiData(
-                                id = movieDto.id,
-                                title = movieDto.title,
-                                overview = movieDto.overview,
-                                image = movieDto.posterFullPath
-                            )
-                        }
-                        _uiNowPlaying.value = _uiNowPlaying.value.copy(
-                            list = _uiNowPlaying.value.list + movieUiDataList,
-                            isLoading = false, isError = false
+            val result = repository.getNowPlaying(currentPageNowPlaying)
+            if (result.isSuccess) {
+                currentPageNowPlaying++
+                val movies = result.getOrNull()
+                if (movies != null) {
+                    val movieUiDataList = movies.map { movieDto ->
+                        MovieUiData(
+                            id = movieDto.id,
+                            title = movieDto.title,
+                            overview = movieDto.overview,
+                            image = movieDto.image
                         )
                     }
-                } else {
-                    _uiNowPlaying.value =
-                        _uiNowPlaying.value.copy(isError = true, isLoading = false)
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+                    _uiNowPlaying.value = _uiNowPlaying.value.copy(
+                        list = _uiNowPlaying.value.list + movieUiDataList,
+                        isLoading = false,
+                        isError = false
+                    )
                 }
-
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                if (ex is UnknownHostException) {
-                    _uiNowPlaying.value =
-                        _uiNowPlaying.value.copy(
-                            isError = true,
-                            errorMessage = "Sem internet",
-                            isLoading = false
-                        )
-                } else {
-                    _uiNowPlaying.value =
-                        _uiNowPlaying.value.copy(isError = true, isLoading = false)
+            } else {
+                val ex = result.exceptionOrNull()
+                if (ex is UnknownHostException){
+                    _uiNowPlaying.value = _uiNowPlaying.value.copy(
+                        isError = true,
+                        isLoading = false,
+                        errorMessage = "Sem internet",
+                        list = emptyList()
+                    )
+                }else{
+                    _uiNowPlaying.value = _uiNowPlaying.value.copy(
+                        isError = true,
+                        isLoading = false,
+                        list = emptyList()
+                    )
                 }
                 currentPageNowPlaying = 1
+                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
             }
         }
     }
@@ -97,90 +94,87 @@ class MovieListViewModel(
     private fun fetchUpcomingMovies() {
         _uiUpComingMovies.value = _uiUpComingMovies.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = listService.getUpcomingMovies(currentPageUpcoming)
-                if (response.isSuccessful) {
-                    currentPageUpcoming++
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        val movieUiDataList = movies.map { movieDto ->
-                            MovieUiData(
-                                id = movieDto.id,
-                                title = movieDto.title,
-                                overview = movieDto.overview,
-                                image = movieDto.posterFullPath
-                            )
-                        }
-                        _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
-                            list = _uiUpComingMovies.value.list + movieUiDataList,
-                            isLoading = false, isError = false
+            val result = repository.getUpcoming(currentPageUpcoming)
+            if (result.isSuccess) {
+                currentPageUpcoming++
+                val movies = result.getOrNull()
+                if (movies != null) {
+                    val movieUiDataList = movies.map { movieDto ->
+                        MovieUiData(
+                            id = movieDto.id,
+                            title = movieDto.title,
+                            overview = movieDto.overview,
+                            image = movieDto.image
                         )
                     }
-                } else {
-                    _uiUpComingMovies.value =
-                        _uiUpComingMovies.value.copy(isError = true, isLoading = false)
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+                    _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
+                        list = _uiUpComingMovies.value.list + movieUiDataList,
+                        isLoading = false,
+                        isError = false
+                    )
                 }
-
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                if (ex is UnknownHostException) {
+            } else {
+                val ex = result.exceptionOrNull()
+                if (ex is UnknownHostException){
                     _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
                         isError = true,
+                        isLoading = false,
                         errorMessage = "Sem internet",
-                        isLoading = false
+                        list = emptyList()
                     )
-                } else {
-                    _uiUpComingMovies.value =
-                        _uiUpComingMovies.value.copy(isError = true, isLoading = false)
+                }else{
+                    _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
+                        isError = true,
+                        isLoading = false,
+                        list = emptyList()
+                    )
                 }
                 currentPageUpcoming = 1
-                Log.d("MovieListViewModel", "Erro na requisição")
+                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
             }
         }
     }
 
     private fun fetchTopRatedMovies() {
-        _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(isLoading = true)
+        _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = listService.getTopRatedMovies(currentPageTopRated)
-                if (response.isSuccessful) {
-                    currentPageTopRated++
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        val movieUiDataList = movies.map { movieDto ->
-                            MovieUiData(
-                                id = movieDto.id,
-                                title = movieDto.title,
-                                overview = movieDto.overview,
-                                image = movieDto.posterFullPath
-                            )
-                        }
-                        _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
-                            list = _uiTopRatedMovies.value.list + movieUiDataList,
-                            isLoading = false, isError = false
+            val result = repository.getTopRated(currentPageTopRated)
+            if (result.isSuccess) {
+                currentPageTopRated++
+                val movies = result.getOrNull()
+                if (movies != null) {
+                    val movieUiDataList = movies.map { movieDto ->
+                        MovieUiData(
+                            id = movieDto.id,
+                            title = movieDto.title,
+                            overview = movieDto.overview,
+                            image = movieDto.image
                         )
                     }
-                } else {
-                    _uiTopRatedMovies.value =
-                        _uiTopRatedMovies.value.copy(isError = true, isLoading = false)
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+                    _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
+                        list = _uiTopRatedMovies.value.list + movieUiDataList,
+                        isLoading = false,
+                        isError = false
+                    )
                 }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                if (ex is UnknownHostException) {
+            } else {
+                val ex = result.exceptionOrNull()
+                if (ex is UnknownHostException){
                     _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
                         isError = true,
+                        isLoading = false,
                         errorMessage = "Sem internet",
-                        isLoading = false
+                        list = emptyList()
                     )
-                } else {
-                    _uiTopRatedMovies.value =
-                        _uiTopRatedMovies.value.copy(isError = true, isLoading = false)
+                }else{
+                    _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
+                        isError = true,
+                        isLoading = false,
+                        list = emptyList()
+                    )
                 }
                 currentPageTopRated = 1
-                Log.d("MovieListViewModel", "Erro na requisição")
+                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
             }
         }
     }
@@ -188,44 +182,43 @@ class MovieListViewModel(
     private fun fetchPopularMovies() {
         _uiPopularMovies.value = _uiPopularMovies.value.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = listService.getPopularMovies(currentPagePopular)
-                if (response.isSuccessful) {
-                    currentPagePopular++
-                    val movies = response.body()?.results
-                    if (movies != null) {
-                        val movieUiDataList = movies.map { movieDto ->
-                            MovieUiData(
-                                id = movieDto.id,
-                                title = movieDto.title,
-                                overview = movieDto.overview,
-                                image = movieDto.posterFullPath
-                            )
-                        }
-                        _uiPopularMovies.value = _uiPopularMovies.value.copy(
-                            list = _uiPopularMovies.value.list + movieUiDataList,
-                            isLoading = false, isError = false
+            val result = repository.getPopular(currentPagePopular)
+            if (result.isSuccess) {
+                currentPagePopular++
+                val movies = result.getOrNull()
+                if (movies != null) {
+                    val movieUiDataList = movies.map { movieDto ->
+                        MovieUiData(
+                            id = movieDto.id,
+                            title = movieDto.title,
+                            overview = movieDto.overview,
+                            image = movieDto.image
                         )
                     }
-                } else {
-                    _uiPopularMovies.value =
-                        _uiPopularMovies.value.copy(isError = true, isLoading = false)
-                    Log.d("MovieListViewModel", "Request Error :: ${response.errorBody()}")
+                    _uiPopularMovies.value = _uiPopularMovies.value.copy(
+                        list = _uiPopularMovies.value.list + movieUiDataList,
+                        isLoading = false,
+                        isError = false
+                    )
                 }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                if (ex is UnknownHostException) {
+            } else {
+                val ex = result.exceptionOrNull()
+                if (ex is UnknownHostException){
                     _uiPopularMovies.value = _uiPopularMovies.value.copy(
                         isError = true,
+                        isLoading = false,
                         errorMessage = "Sem internet",
-                        isLoading = false
+                        list = emptyList()
                     )
-                } else {
-                    _uiPopularMovies.value =
-                        _uiPopularMovies.value.copy(isError = true, isLoading = false)
+                }else{
+                    _uiPopularMovies.value = _uiPopularMovies.value.copy(
+                        isError = true,
+                        isLoading = false,
+                        list = emptyList()
+                    )
                 }
                 currentPagePopular = 1
-                Log.d("MovieListViewModel", "Erro na requisição")
+                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
             }
         }
     }
@@ -251,9 +244,10 @@ class MovieListViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val listService = RetrofitClient.retrofitInstance.create(ListService::class.java)
-                return MovieListViewModel(listService) as T
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+
+                return MovieListViewModel(repository =(application as CineNowApplication).repository) as T
             }
         }
     }
