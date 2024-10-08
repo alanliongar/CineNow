@@ -1,7 +1,6 @@
 package com.devspacecinenow
 
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**
@@ -12,6 +11,18 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+
+        //GWT
+        //Given - dados dois numeros
+        val oneNum = 2
+        val twoNum = 5
+
+        //when (soma) - operação
+        val sum = oneNum + twoNum
+
+
+        //then
+        val expected = 5
+        assertEquals(expected, sum)
     }
 }
