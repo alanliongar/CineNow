@@ -11,7 +11,6 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-
         //GWT
         //Given - dados dois numeros
         val oneNum = 2

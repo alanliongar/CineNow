@@ -26,14 +26,14 @@ class MovieListViewModel(
     private var currentPagePopular: Int = 1
 
     private val _uiNowPlaying = MutableStateFlow<MovieListUiState>(MovieListUiState())
-    private val _uiUpComingMovies = MutableStateFlow<MovieListUiState>(MovieListUiState())
-    private val _uiTopRatedMovies = MutableStateFlow<MovieListUiState>(MovieListUiState())
-    private val _uiPopularMovies = MutableStateFlow<MovieListUiState>(MovieListUiState())
+    private val _uiUpComing = MutableStateFlow<MovieListUiState>(MovieListUiState())
+    private val _uiTopRated = MutableStateFlow<MovieListUiState>(MovieListUiState())
+    private val _uiPopular = MutableStateFlow<MovieListUiState>(MovieListUiState())
 
     val uiNowPlaying: StateFlow<MovieListUiState> = _uiNowPlaying
-    val uiUpComingMovies: StateFlow<MovieListUiState> = _uiUpComingMovies
-    val TopRatedMovies: StateFlow<MovieListUiState> = _uiTopRatedMovies
-    val PopularMovies: StateFlow<MovieListUiState> = _uiPopularMovies
+    val uiUpComing: StateFlow<MovieListUiState> = _uiUpComing
+    val uiTopRated: StateFlow<MovieListUiState> = _uiTopRated
+    val uiPopular: StateFlow<MovieListUiState> = _uiPopular
 
 
     init {
@@ -92,7 +92,7 @@ class MovieListViewModel(
     }
 
     private fun fetchUpcomingMovies() {
-        _uiUpComingMovies.value = _uiUpComingMovies.value.copy(isLoading = true, isError = false)
+        _uiUpComing.value = _uiUpComing.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getUpcoming(currentPageUpcoming)
             if (result.isSuccess) {
@@ -107,8 +107,8 @@ class MovieListViewModel(
                             image = movieDto.image
                         )
                     }
-                    _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
-                        list = _uiUpComingMovies.value.list + movieUiDataList,
+                    _uiUpComing.value = _uiUpComing.value.copy(
+                        list = _uiUpComing.value.list + movieUiDataList,
                         isLoading = false,
                         isError = false
                     )
@@ -116,14 +116,14 @@ class MovieListViewModel(
             } else {
                 val ex = result.exceptionOrNull()
                 if (ex is UnknownHostException){
-                    _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
+                    _uiUpComing.value = _uiUpComing.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
                 }else{
-                    _uiUpComingMovies.value = _uiUpComingMovies.value.copy(
+                    _uiUpComing.value = _uiUpComing.value.copy(
                         isError = true,
                         isLoading = false,
                         list = emptyList()
@@ -136,7 +136,7 @@ class MovieListViewModel(
     }
 
     private fun fetchTopRatedMovies() {
-        _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(isLoading = true, isError = false)
+        _uiTopRated.value = _uiTopRated.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getTopRated(currentPageTopRated)
             if (result.isSuccess) {
@@ -151,8 +151,8 @@ class MovieListViewModel(
                             image = movieDto.image
                         )
                     }
-                    _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
-                        list = _uiTopRatedMovies.value.list + movieUiDataList,
+                    _uiTopRated.value = _uiTopRated.value.copy(
+                        list = _uiTopRated.value.list + movieUiDataList,
                         isLoading = false,
                         isError = false
                     )
@@ -160,14 +160,14 @@ class MovieListViewModel(
             } else {
                 val ex = result.exceptionOrNull()
                 if (ex is UnknownHostException){
-                    _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
+                    _uiTopRated.value = _uiTopRated.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
                 }else{
-                    _uiTopRatedMovies.value = _uiTopRatedMovies.value.copy(
+                    _uiTopRated.value = _uiTopRated.value.copy(
                         isError = true,
                         isLoading = false,
                         list = emptyList()
@@ -180,7 +180,7 @@ class MovieListViewModel(
     }
 
     private fun fetchPopularMovies() {
-        _uiPopularMovies.value = _uiPopularMovies.value.copy(isLoading = true)
+        _uiPopular.value = _uiPopular.value.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getPopular(currentPagePopular)
             if (result.isSuccess) {
@@ -195,8 +195,8 @@ class MovieListViewModel(
                             image = movieDto.image
                         )
                     }
-                    _uiPopularMovies.value = _uiPopularMovies.value.copy(
-                        list = _uiPopularMovies.value.list + movieUiDataList,
+                    _uiPopular.value = _uiPopular.value.copy(
+                        list = _uiPopular.value.list + movieUiDataList,
                         isLoading = false,
                         isError = false
                     )
@@ -204,14 +204,14 @@ class MovieListViewModel(
             } else {
                 val ex = result.exceptionOrNull()
                 if (ex is UnknownHostException){
-                    _uiPopularMovies.value = _uiPopularMovies.value.copy(
+                    _uiPopular.value = _uiPopular.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
                 }else{
-                    _uiPopularMovies.value = _uiPopularMovies.value.copy(
+                    _uiPopular.value = _uiPopular.value.copy(
                         isError = true,
                         isLoading = false,
                         list = emptyList()

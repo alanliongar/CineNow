@@ -32,16 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.list.presentation.MovieListViewModel
 
 @Composable
 fun MovieListScreen(navController: NavHostController, viewModel: MovieListViewModel) {
 
     val nowPlayingMovies by viewModel.uiNowPlaying.collectAsState()
-    val upcomingMovies by viewModel.uiUpComingMovies.collectAsState()
-    val topRatedMovies by viewModel.TopRatedMovies.collectAsState()
-    val popularMovies by viewModel.PopularMovies.collectAsState()
+    val upcomingMovies by viewModel.uiUpComing.collectAsState()
+    val topRatedMovies by viewModel.uiTopRated.collectAsState()
+    val popularMovies by viewModel.uiPopular.collectAsState()
 
     MovieListContent(
         topRatedMovies,
