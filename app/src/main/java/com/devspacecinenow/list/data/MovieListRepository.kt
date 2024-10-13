@@ -1,14 +1,13 @@
 package com.devspacecinenow.list.data
 
 import com.devspacecinenow.common.data.model.Movie
-import com.devspacecinenow.common.model.MovieResponse
-import com.devspacecinenow.list.data.local.MovieListLocalDataSource
+import com.devspacecinenow.list.data.local.LocalDataSource
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 import java.io.IOException
 import java.net.SocketTimeoutException
 
 class MovieListRepository(
-    private val local: MovieListLocalDataSource,
+    private val local: LocalDataSource,//MovieListLocalDataSource,
     private val remote: MovieListRemoteDataSource,
 ) {
     suspend fun getNowPlaying(page: Int): Result<List<Movie>?> {
@@ -23,6 +22,7 @@ class MovieListRepository(
             } else {
                 // If remote call fails, return local data
                 Result.success(local.getNowPlayingMovies(page))
+                //Result.success(emptyList())
             }
         } catch (ex: Exception) {
             // If exception occurs, return local data
@@ -43,15 +43,15 @@ class MovieListRepository(
                 if (moviesRemote.isNotEmpty()) {
                     local.updateLocalItems(moviesRemote)
                 }
-                Result.success(local.getUpComingMovies(page))
+                Result.success(local.getUpcomingMovies(page))
             } else {
                 // If remote call fails, return local data
-                Result.success(local.getUpComingMovies(page))
+                Result.success(local.getUpcomingMovies(page))
             }
         } catch (ex: Exception) {
             // If exception occurs, return local data
             if (ex is IOException || ex is SocketTimeoutException) {
-                Result.success(local.getUpComingMovies(page))
+                Result.success(local.getUpcomingMovies(page))
             } else {
                 ex.printStackTrace()
                 Result.failure(ex)

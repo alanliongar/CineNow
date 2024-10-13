@@ -10,6 +10,7 @@ import com.devspacecinenow.CineNowApplication
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class MovieListViewModel(
-    private val repository: MovieListRepository
+    private val repository: MovieListRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private var currentPageNowPlaying: Int = 1
@@ -49,7 +51,7 @@ class MovieListViewModel(
 
     private fun fetchNowPlayingMovies() {
         _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getNowPlaying(currentPageNowPlaying)
             if (result.isSuccess) {
                 currentPageNowPlaying++
@@ -71,14 +73,14 @@ class MovieListViewModel(
                 }
             } else {
                 val ex = result.exceptionOrNull()
-                if (ex is UnknownHostException){
+                if (ex is UnknownHostException) {
                     _uiNowPlaying.value = _uiNowPlaying.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
-                }else{
+                } else {
                     _uiNowPlaying.value = _uiNowPlaying.value.copy(
                         isError = true,
                         isLoading = false,
@@ -93,7 +95,7 @@ class MovieListViewModel(
 
     private fun fetchUpcomingMovies() {
         _uiUpComing.value = _uiUpComing.value.copy(isLoading = true, isError = false)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getUpcoming(currentPageUpcoming)
             if (result.isSuccess) {
                 currentPageUpcoming++
@@ -115,14 +117,14 @@ class MovieListViewModel(
                 }
             } else {
                 val ex = result.exceptionOrNull()
-                if (ex is UnknownHostException){
+                if (ex is UnknownHostException) {
                     _uiUpComing.value = _uiUpComing.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
-                }else{
+                } else {
                     _uiUpComing.value = _uiUpComing.value.copy(
                         isError = true,
                         isLoading = false,
@@ -136,8 +138,16 @@ class MovieListViewModel(
     }
 
     private fun fetchTopRatedMovies() {
-        _uiTopRated.value = _uiTopRated.value.copy(isLoading = true, isError = false)
-        viewModelScope.launch(Dispatchers.IO) {
+        //GWT
+
+        //Given create new instance of view model
+
+        //when collect uiTopRated state flow
+
+        //then verify if data is as expected
+
+        _uiTopRated.value = _uiTopRated.value.copy(isLoading = true)
+        viewModelScope.launch(dispatcher) {
             val result = repository.getTopRated(currentPageTopRated)
             if (result.isSuccess) {
                 currentPageTopRated++
@@ -159,14 +169,14 @@ class MovieListViewModel(
                 }
             } else {
                 val ex = result.exceptionOrNull()
-                if (ex is UnknownHostException){
+                if (ex is UnknownHostException) {
                     _uiTopRated.value = _uiTopRated.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
-                }else{
+                } else {
                     _uiTopRated.value = _uiTopRated.value.copy(
                         isError = true,
                         isLoading = false,
@@ -181,7 +191,7 @@ class MovieListViewModel(
 
     private fun fetchPopularMovies() {
         _uiPopular.value = _uiPopular.value.copy(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val result = repository.getPopular(currentPagePopular)
             if (result.isSuccess) {
                 currentPagePopular++
@@ -203,14 +213,14 @@ class MovieListViewModel(
                 }
             } else {
                 val ex = result.exceptionOrNull()
-                if (ex is UnknownHostException){
+                if (ex is UnknownHostException) {
                     _uiPopular.value = _uiPopular.value.copy(
                         isError = true,
                         isLoading = false,
                         errorMessage = "Sem internet",
                         list = emptyList()
                     )
-                }else{
+                } else {
                     _uiPopular.value = _uiPopular.value.copy(
                         isError = true,
                         isLoading = false,
@@ -247,7 +257,7 @@ class MovieListViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
 
-                return MovieListViewModel(repository =(application as CineNowApplication).repository) as T
+                return MovieListViewModel(repository = (application as CineNowApplication).repository) as T
             }
         }
     }

@@ -5,26 +5,26 @@ import com.devspacecinenow.common.data.local.MovieDao
 import com.devspacecinenow.common.data.local.MovieEntity
 import com.devspacecinenow.common.data.model.Movie
 
-class MovieListLocalDataSource(private val dao: MovieDao) {
+class MovieListLocalDataSource(private val dao: MovieDao): LocalDataSource {
 
 
-    suspend fun getNowPlayingMovies(page: Int): List<Movie> {
+    override suspend fun getNowPlayingMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.NowPlaying, page)
     }
 
-    suspend fun getTopRatedMovies(page: Int): List<Movie> {
+    override suspend fun getTopRatedMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.TopRated, page)
     }
 
-    suspend fun getUpComingMovies(page: Int): List<Movie> {
+    override suspend fun getUpcomingMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.UpComing, page)
     }
 
-    suspend fun getPopularMovies(page: Int): List<Movie> {
+    override suspend fun getPopularMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.Popular, page)
     }
 
-    suspend fun updateLocalItems(movies: List<Movie>) {
+    override suspend fun updateLocalItems(movies: List<Movie>) {
         dao.insertAll(
             movies.map {
                 MovieEntity(
