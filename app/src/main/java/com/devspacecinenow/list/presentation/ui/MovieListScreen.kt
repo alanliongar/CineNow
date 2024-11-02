@@ -109,12 +109,6 @@ fun MovieListContent(
     }
 }
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun MovieListPreview(modifier: Modifier = Modifier) {
-}*/
-
 @Composable
 private fun MovieSession(
     label: String,
