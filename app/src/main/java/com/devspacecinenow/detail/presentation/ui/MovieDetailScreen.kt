@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,7 +85,14 @@ fun MovieDetailScreen(
                 )
             }
         }
-    }
+    } ?: Text(
+        modifier = Modifier.padding(16.dp),
+        text = "Algo deu errado",
+        fontWeight = FontWeight.Bold,
+        color = Color.Red,
+        fontSize = 24.sp,
+        //horizontalArrangement = Arrangement.Center
+    )
 
 }
 

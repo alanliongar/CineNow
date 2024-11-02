@@ -20,25 +20,30 @@ class MovieDetailViewModel(
     val uiMovieDetail: StateFlow<MovieDto?> = _uiMovieDetail
 
     fun fetchMovieDetail(movieId: String) {
-        if (_uiMovieDetail.value == null) {
-        viewModelScope.launch(Dispatchers.IO){
-            val response = detailService.getMovieById(movieId)
-            if (response.isSuccessful) {
-                val movie = response.body()
-                if (movie != null) {
-                    _uiMovieDetail.value = movie
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (_uiMovieDetail.value == null) {
+                    val response = detailService.getMovieById(movieId)
+                    if (response.isSuccessful) {
+                        val movie = response.body()
+                        if (movie != null) {
+                            _uiMovieDetail.value = movie
+                        }
+                    } else {
+                        Log.d("MovieDetailViewModel", "Request Error :: ${response.errorBody()}")
+                    }
+
+                } else {
+                    Log.d("MovieDetailViewModel", "Ja tem um valor lá dentro")
                 }
-            } else {
-                Log.d("MovieDetailViewModel", "Request Error :: ${response.errorBody()}")
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
-        }
-        } else {
-            Log.d("MovieDetailViewModel", "Ja tem um valor lá dentro")
         }
     }
 
     fun cleanMovieID() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             delay(1000)
             _uiMovieDetail.value = null
         }
