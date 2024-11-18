@@ -11,13 +11,11 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -28,7 +26,7 @@ class MovieListViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
 
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
 
     private val underTest by lazy {
         MovieListViewModel(repository, testDispatcher)
@@ -38,7 +36,7 @@ class MovieListViewModelTest {
     @Test
     fun `Given fresh viewModel when collecting to nowPlaying then assert expected value`() {
         runTest {
-            //Given
+            // Given
             val movies = listOf(
                 Movie(
                     id = 1,
@@ -49,14 +47,29 @@ class MovieListViewModelTest {
                     page = 1
                 )
             )
-            whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies)) //esse é o dublê.
+            whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies))
 
-            underTest
+            // Lista para coletar os resultados
+            /*val collectedValues = mutableListOf<MovieListUiState>()*/
 
-            advanceUntilIdle()
+            // Iniciar a coleta em um escopo de fundo //e também essa parte do código comentada
+            //explica como que faz pra testar vários estados de um mesmo stateflow.
+            /*backgroundScope.launch(testDispatcher) {
+                underTest.uiNowPlaying.toList(collectedValues)
+            }*/
+            /*var result: MovieListUiState? = null
 
-            val result = underTest.uiNowPlaying.take(2).toList()[1]
+            backgroundScope.launch(testDispatcher) {
+                result = underTest.uiNowPlaying.drop(1).first()
+                delay(2000)
+            }*/
 
+            var result: MovieListUiState? = null
+
+            backgroundScope.launch(testDispatcher){
+               result = underTest.uiNowPlaying.drop(1).first()
+            }
+            // Assert
             val expected = MovieListUiState(
                 list = listOf(
                     MovieUiData(
@@ -66,8 +79,7 @@ class MovieListViewModelTest {
             )
             assertEquals(expected, result)
         }
-    } //aqui entendi!
-
+    }
 
     @Test
     fun `Given fresh viewModel when collecting to topRated then assert expected value`() {
