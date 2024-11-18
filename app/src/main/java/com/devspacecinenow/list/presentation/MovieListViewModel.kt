@@ -50,9 +50,11 @@ class MovieListViewModel(
     }
 
     private fun fetchNowPlayingMovies() {
+        println("MovieListViewModel Fetching now playing movies")
         _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
         viewModelScope.launch(dispatcher) {
             val result = repository.getNowPlaying(currentPageNowPlaying)
+            println("MovieListViewModel Result: ${result}")
             if (result.isSuccess) {
                 currentPageNowPlaying++
                 val movies = result.getOrNull()
@@ -70,6 +72,7 @@ class MovieListViewModel(
                         isLoading = false,
                         isError = false
                     )
+                    println("MovieListViewModel, Movies fetched: $movieUiDataList")
                 }
             } else {
                 val ex = result.exceptionOrNull()

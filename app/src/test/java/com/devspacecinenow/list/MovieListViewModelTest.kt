@@ -11,18 +11,24 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MovieListViewModelTest {
 
+
     private val repository: MovieListRepository = mock() //mock = dado mockado, é um dublê.
 
     @OptIn(ExperimentalCoroutinesApi::class)
 
-    private val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+    private val testDispatcher = TestCoroutineDispatcher()
 
     private val underTest by lazy {
         MovieListViewModel(repository, testDispatcher)
@@ -33,7 +39,7 @@ class MovieListViewModelTest {
     fun `Given fresh viewModel when collecting to nowPlaying then assert expected value`() {
         runTest {
             //Given
-            val movies = listOf<Movie>(
+            val movies = listOf(
                 Movie(
                     id = 1,
                     title = "title1",
@@ -45,24 +51,22 @@ class MovieListViewModelTest {
             )
             whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies)) //esse é o dublê.
 
+            underTest
 
-            //When
-            underTest.uiNowPlaying.test { //a função test entende que o último item é o item a ser testado (biblioteca turbine)
-                //Then assert expected value
-                val expected = MovieListUiState(
-                    list = listOf(
-                        MovieUiData(
-                            id = 1,
-                            title = "title1",
-                            overview = "1",
-                            image = "image1",
-                        )
+            advanceUntilIdle()
+
+            val result = underTest.uiNowPlaying.take(2).toList()[1]
+
+            val expected = MovieListUiState(
+                list = listOf(
+                    MovieUiData(
+                        id = 1, title = "title1", overview = "1", image = "image1"
                     )
                 )
-                assertEquals(expected, awaitItem())
-            }
+            )
+            assertEquals(expected, result)
         }
-    }
+    } //aqui entendi!
 
 
     @Test
@@ -129,3 +133,5 @@ class MovieListViewModelTest {
         }
     }
 }
+
+//3 cenários testados - testando viewmodel;
