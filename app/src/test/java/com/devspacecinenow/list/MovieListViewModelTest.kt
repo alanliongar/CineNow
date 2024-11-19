@@ -36,7 +36,6 @@ class MovieListViewModelTest {
     @Test
     fun `Given fresh viewModel when collecting to nowPlaying then assert expected value`() {
         runTest {
-            // Given
             val movies = listOf(
                 Movie(
                     id = 1,
@@ -49,27 +48,12 @@ class MovieListViewModelTest {
             )
             whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies))
 
-            // Lista para coletar os resultados
-            /*val collectedValues = mutableListOf<MovieListUiState>()*/
-
-            // Iniciar a coleta em um escopo de fundo //e também essa parte do código comentada
-            //explica como que faz pra testar vários estados de um mesmo stateflow.
-            /*backgroundScope.launch(testDispatcher) {
-                underTest.uiNowPlaying.toList(collectedValues)
-            }*/
-            /*var result: MovieListUiState? = null
-
-            backgroundScope.launch(testDispatcher) {
-                result = underTest.uiNowPlaying.drop(1).first()
-                delay(2000)
-            }*/
-
             var result: MovieListUiState? = null
 
-            backgroundScope.launch(testDispatcher){
-               result = underTest.uiNowPlaying.drop(1).first()
+            backgroundScope.launch(testDispatcher) {
+                result = underTest.uiNowPlaying.drop(1)
+                    .first() //aqui está pegando somente o segundo cenário.
             }
-            // Assert
             val expected = MovieListUiState(
                 list = listOf(
                     MovieUiData(
@@ -80,6 +64,21 @@ class MovieListViewModelTest {
             assertEquals(expected, result)
         }
     }
+
+    // Lista para coletar os resultados
+    /*val collectedValues = mutableListOf<MovieListUiState>()*/
+
+    // Iniciar a coleta em um escopo de fundo //e também essa parte do código comentada
+    //explica como que faz pra testar vários estados de um mesmo stateflow.
+    /*backgroundScope.launch(testDispatcher) {
+        underTest.uiNowPlaying.toList(collectedValues)
+    }*/
+    /*var result: MovieListUiState? = null
+
+    backgroundScope.launch(testDispatcher) {
+        result = underTest.uiNowPlaying.drop(1).first()
+        delay(2000)
+    }*/
 
     @Test
     fun `Given fresh viewModel when collecting to topRated then assert expected value`() {
