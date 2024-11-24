@@ -50,7 +50,6 @@ class MovieListViewModel(
     }
 
     private fun fetchNowPlayingMovies() {
-        println("MovieListViewModel Fetching now playing movies")
         _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
         viewModelScope.launch(dispatcher) {
             val result = repository.getNowPlaying(currentPageNowPlaying)
@@ -73,7 +72,14 @@ class MovieListViewModel(
                         isError = false
                     )
                     println("MovieListViewModel, Movies fetched: $movieUiDataList")
+                } else {
+                    _uiNowPlaying.value = _uiNowPlaying.value.copy(
+                        list = _uiNowPlaying.value.list + emptyList(),
+                        isLoading = false,
+                        isError = false
+                    )
                 }
+                //se for um resultado vazio, simplesmente retorne uma lista vazia, não faça nada!
             } else {
                 val ex = result.exceptionOrNull()
                 if (ex is UnknownHostException) {
@@ -99,7 +105,7 @@ class MovieListViewModel(
     private fun fetchUpcomingMovies() {
         _uiUpComing.value = _uiUpComing.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(dispatcher) {
-            val result = repository.getUpcoming(currentPageUpcoming)
+            val result = repository.getUpComing(currentPageUpcoming)
             if (result.isSuccess) {
                 currentPageUpcoming++
                 val movies = result.getOrNull()
@@ -114,6 +120,12 @@ class MovieListViewModel(
                     }
                     _uiUpComing.value = _uiUpComing.value.copy(
                         list = _uiUpComing.value.list + movieUiDataList,
+                        isLoading = false,
+                        isError = false
+                    )
+                } else {
+                    _uiUpComing.value = _uiUpComing.value.copy(
+                        list = _uiUpComing.value.list + emptyList(),
                         isLoading = false,
                         isError = false
                     )
@@ -135,7 +147,7 @@ class MovieListViewModel(
                     )
                 }
                 currentPageUpcoming = 1
-                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
+                Log.d("MovieListViewModel", "Request Error :: ${result}")
             }
         }
     }
@@ -169,6 +181,12 @@ class MovieListViewModel(
                         isLoading = false,
                         isError = false
                     )
+                } else {
+                    _uiTopRated.value = _uiTopRated.value.copy(
+                        list = _uiTopRated.value.list + emptyList(),
+                        isLoading = false,
+                        isError = false
+                    )
                 }
             } else {
                 val ex = result.exceptionOrNull()
@@ -187,7 +205,7 @@ class MovieListViewModel(
                     )
                 }
                 currentPageTopRated = 1
-                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
+                Log.d("MovieListViewModel", "Request Error :: ${result}")
             }
         }
     }
@@ -213,6 +231,8 @@ class MovieListViewModel(
                         isLoading = false,
                         isError = false
                     )
+                } else {
+
                 }
             } else {
                 val ex = result.exceptionOrNull()
@@ -231,7 +251,7 @@ class MovieListViewModel(
                     )
                 }
                 currentPagePopular = 1
-                Log.d("MovieListViewModel", "Request Error :: ${result.toString()}")
+                Log.d("MovieListViewModel", "Request Error :: ${result}")
             }
         }
     }

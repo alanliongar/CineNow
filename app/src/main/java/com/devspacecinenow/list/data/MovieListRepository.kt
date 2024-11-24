@@ -35,7 +35,7 @@ class MovieListRepository(
         }
     }
 
-    suspend fun getUpcoming(page: Int): Result<List<Movie>?> {
+    suspend fun getUpComing(page: Int): Result<List<Movie>?> {
         return try {
             val result = remote.getUpcoming(page)
             if (result.isSuccess) {

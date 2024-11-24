@@ -32,9 +32,8 @@ class MovieListViewModelTest {
         MovieListViewModel(repository, testDispatcher)
     }
 
-
     @Test
-    fun `Given fresh viewModel when collecting to nowPlaying then assert expected value`() {
+    fun `Given fresh viewModel When collecting to nowPlaying Then assert expected value`() {
         runTest {
             val movies = listOf(
                 Movie(
@@ -65,23 +64,8 @@ class MovieListViewModelTest {
         }
     }
 
-    // Lista para coletar os resultados
-    /*val collectedValues = mutableListOf<MovieListUiState>()*/
-
-    // Iniciar a coleta em um escopo de fundo //e também essa parte do código comentada
-    //explica como que faz pra testar vários estados de um mesmo stateflow.
-    /*backgroundScope.launch(testDispatcher) {
-        underTest.uiNowPlaying.toList(collectedValues)
-    }*/
-    /*var result: MovieListUiState? = null
-
-    backgroundScope.launch(testDispatcher) {
-        result = underTest.uiNowPlaying.drop(1).first()
-        delay(2000)
-    }*/
-
     @Test
-    fun `Given fresh viewModel when collecting to topRated then assert expected value`() {
+    fun `Given fresh viewModel When collecting to topRated Then assert expected value`() {
         runTest {
             //Given
             val movies = listOf<Movie>(
@@ -96,30 +80,33 @@ class MovieListViewModelTest {
             )
             whenever(repository.getTopRated(1)).thenReturn(Result.success(movies)) //esse é o dublê.
 
-
-            //When
-            underTest.uiTopRated.test { //a função test entende que o último item é o item a ser testado (biblioteca turbine)
-                //Then assert expected value
-                val expected = MovieListUiState(
-                    list = listOf(
-                        MovieUiData(
-                            id = 1,
-                            title = "title1",
-                            overview = "1",
-                            image = "image1",
-                        )
+            val expected = MovieListUiState(
+                list = listOf(
+                    MovieUiData(
+                        id = 1,
+                        title = "title1",
+                        image = "image1",
+                        overview = "1"
                     )
                 )
-                assertEquals(expected, awaitItem())
+            )
+
+            var result: MovieListUiState? = null
+
+            backgroundScope.launch(testDispatcher) { //estou testando somente o segundo cenário, não estou testando o isloading aqui.
+                result = underTest.uiTopRated.drop(1).first()
             }
+
+            assertEquals(expected, result)
+
         }
     }
 
     @Test
-    fun `Given fresh viewModel when collecting to topRated then assert loading state`() {
+    fun `Given fresh viewModel When collecting to topRated Then assert loading state`() {
         runTest {
             //Given
-            val movies = listOf<Movie>(
+            val movies = listOf(
                 Movie(
                     id = 1,
                     title = "title1",
@@ -132,9 +119,12 @@ class MovieListViewModelTest {
 
             whenever(repository.getTopRated(1)).thenReturn(Result.success(movies)) //esse é o dublê.
 
+            var result: MovieListUiState? = null
 
             //When
-            val result = underTest.uiTopRated.value
+            backgroundScope.launch(testDispatcher) {
+                result = underTest.uiTopRated.first()
+            }
 
             //Then assert expected value
             val expected = MovieListUiState(

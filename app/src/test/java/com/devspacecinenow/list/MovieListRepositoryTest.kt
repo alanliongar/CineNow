@@ -19,35 +19,6 @@ class MovieListRepositoryTest {
         MovieListRepository(local = local, remote = remote)
     }
 
-
-    @Test
-    fun `Given no internet connection When getting now playing movies Then return local data`() {
-        runTest {
-            //Given
-            val localList = listOf(
-                Movie(
-                    id = 1,
-                    title = "title1",
-                    overview = "overview1",
-                    image = "image1",
-                    category = MovieCategory.NowPlaying.name,
-                    page = 1
-                )
-            )
-            whenever(remote.getNowPlaying(1)).thenReturn(Result.failure(UnknownHostException("No internet")))
-            local.nowPlaying = localList
-
-            //whenever(local.getNowPlayingMovies(1)).thenReturn(localList)
-
-            //When
-            val result = underTest.getNowPlaying(1) //aqui retorna um RESULT que contém uma lista.
-
-            //Then
-            val expected = localList
-            assertEquals(expected, result.getOrNull())
-        }
-    }
-
     @Test
     fun `Given remote success When getting now playing movies Then update local data`() {
         runTest {
@@ -76,6 +47,32 @@ class MovieListRepositoryTest {
             assertEquals(expected, result.getOrNull())
             assertEquals(local.updateItems, list)
             //verify(local).updateLocalItems(list)
+        }
+    }
+
+    @Test
+    fun `Given no internet connection When getting now playing movies Then return local data`() {
+        runTest {
+            //Given
+            val localList = listOf(
+                Movie(
+                    id = 1,
+                    title = "title1",
+                    overview = "overview1",
+                    image = "image1",
+                    category = MovieCategory.NowPlaying.name,
+                    page = 1
+                )
+            )
+            whenever(remote.getNowPlaying(1)).thenReturn(Result.failure(UnknownHostException("No internet")))
+            local.nowPlaying = localList
+
+            //When
+            val result = underTest.getNowPlaying(1) //aqui retorna um RESULT que contém uma lista.
+
+            //Then
+            val expected = localList
+            assertEquals(expected, result.getOrNull())
         }
     }
 }
