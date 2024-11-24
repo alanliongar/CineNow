@@ -3,10 +3,12 @@ package com.devspacecinenow.list.data.remote
 import android.accounts.NetworkErrorException
 import com.devspacecinenow.common.data.local.MovieCategory
 import com.devspacecinenow.common.data.model.Movie
+import kotlin.jvm.Throws
 
 class MovieListRemoteDataSource(
     private val listService: ListService
 ) {
+    @Throws(Exception::class)
     suspend fun getNowPlaying(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getNowPlayingMovies(page)
@@ -31,7 +33,8 @@ class MovieListRemoteDataSource(
         }
     }
 
-    suspend fun getUpcoming(page: Int): Result<List<Movie>?> {
+    @Throws(Exception::class)
+    suspend fun getUpComing(page: Int): Result<List<Movie>?> {
         return try {
             //throw UnknownHostException()
             val response = listService.getUpcomingMovies(page)
@@ -56,6 +59,7 @@ class MovieListRemoteDataSource(
         }
     }
 
+    @Throws(Exception::class)
     suspend fun getTopRated(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getTopRatedMovies(page)
@@ -80,6 +84,7 @@ class MovieListRemoteDataSource(
         }
     }
 
+    @Throws(Exception::class)
     suspend fun getPopular(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getPopularMovies(page)

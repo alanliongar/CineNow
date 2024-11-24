@@ -3,7 +3,7 @@ package com.devspacecinenow.list.data
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.local.LocalDataSource
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
-import java.io.IOException
+import okio.IOException
 import java.net.SocketTimeoutException
 
 class MovieListRepository(
@@ -37,21 +37,21 @@ class MovieListRepository(
 
     suspend fun getUpComing(page: Int): Result<List<Movie>?> {
         return try {
-            val result = remote.getUpcoming(page)
+            val result = remote.getUpComing(page)
             if (result.isSuccess) {
                 val moviesRemote = result.getOrNull() ?: emptyList()
                 if (moviesRemote.isNotEmpty()) {
                     local.updateLocalItems(moviesRemote)
                 }
-                Result.success(local.getUpcomingMovies(page))
+                Result.success(local.getUpComingMovies(page))
             } else {
                 // If remote call fails, return local data
-                Result.success(local.getUpcomingMovies(page))
+                Result.success(local.getUpComingMovies(page))
             }
         } catch (ex: Exception) {
             // If exception occurs, return local data
             if (ex is IOException || ex is SocketTimeoutException) {
-                Result.success(local.getUpcomingMovies(page))
+                Result.success(local.getUpComingMovies(page))
             } else {
                 ex.printStackTrace()
                 Result.failure(ex)

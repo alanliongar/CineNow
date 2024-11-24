@@ -16,7 +16,7 @@ class MovieListLocalDataSource(private val dao: MovieDao): LocalDataSource {
         return getMoviesByCategory(MovieCategory.TopRated, page)
     }
 
-    override suspend fun getUpcomingMovies(page: Int): List<Movie> {
+    override suspend fun getUpComingMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.UpComing, page)
     }
 

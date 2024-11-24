@@ -1,4 +1,4 @@
-package com.devspacecinenow.list
+package com.devspacecinenow
 
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.local.LocalDataSource
@@ -13,7 +13,7 @@ class FakeMovieListLocalDataSource : LocalDataSource {
         return nowPlaying
     }
 
-    override suspend fun getUpcomingMovies(page: Int): List<Movie> {
+    override suspend fun getUpComingMovies(page: Int): List<Movie> {
         return upComing
     }
 

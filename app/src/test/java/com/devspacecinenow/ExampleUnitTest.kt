@@ -14,7 +14,7 @@ class ExampleUnitTest {
         //GWT
         //Given - dados dois numeros
         val oneNum = 2
-        val twoNum = 5
+        val twoNum = 3
 
         //when (soma) - operação
         val sum = oneNum + twoNum

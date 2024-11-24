@@ -1,6 +1,5 @@
-package com.devspacecinenow.list
+package com.devspacecinenow
 
-import app.cash.turbine.test
 import com.devspacecinenow.common.data.local.MovieCategory
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.MovieListRepository
