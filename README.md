@@ -22,6 +22,9 @@ Funcionalidades
   - ComposePreview
   - NavHostController
   - AsyncImage
+- Unit tests
+  - Mockito
+  - Junit
 - Retrofit
 - Okhttp3
 - TMDB API
