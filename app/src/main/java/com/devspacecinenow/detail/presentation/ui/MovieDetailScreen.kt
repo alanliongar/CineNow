@@ -87,7 +87,7 @@ fun MovieDetailScreen(
         }
     } ?: Text(
         modifier = Modifier.padding(16.dp),
-        text = "Algo deu errado",
+        text = "Something went wrong",
         fontWeight = FontWeight.Bold,
         color = Color.Red,
         fontSize = 24.sp,

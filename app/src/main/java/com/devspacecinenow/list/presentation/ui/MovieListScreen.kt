@@ -80,28 +80,28 @@ fun MovieListContent(
             text = "CineNow"
         )
         MovieSession(
-            "Em Cartaz",
+            "Now Playing",
             nowPlayingMovies,
             onClick = onClick,
             loadMore = loadMoreNowPlaying
         )
         Spacer(modifier = Modifier.size(15.dp))
         MovieSession(
-            "Em breve lançará",
+            "Upcoming",
             upcomingMovies,
             onClick = onClick,
             loadMore = loadMoreUpcoming
         )
         Spacer(modifier = Modifier.size(15.dp))
         MovieSession(
-            "Mais aclamados",
+            "Top Rated",
             topRatedMovies,
             onClick = onClick,
             loadMore = loadMoreTopRated
         )
         Spacer(modifier = Modifier.size(15.dp))
         MovieSession(
-            "Mais populares",
+            "Popular",
             popularMovies,
             onClick = onClick,
             loadMore = loadMorePopular
@@ -126,7 +126,7 @@ private fun MovieSession(
         Text(fontSize = 24.sp, text = label, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.size(8.dp))
         if (movieListUiState.isLoading) {
-            Text(color = Color.Green, text = "CARREGANDO", fontWeight = FontWeight.SemiBold)
+            Text(color = Color.Green, text = "Loading...", fontWeight = FontWeight.SemiBold)
         } else if (movieListUiState.isError) {
             Text(
                 color = Color.Red,
@@ -162,7 +162,7 @@ private fun MovieList(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(onClick = loadMore) {
-                    Text("Carregar")
+                    Text("Load more")
                 }
             }
         }

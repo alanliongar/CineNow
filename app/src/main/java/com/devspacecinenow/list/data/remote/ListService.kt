@@ -6,15 +6,15 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 /*&page={page}*/
 interface ListService {
-    @GET("now_playing?language=pt-BR")
+    @GET("now_playing?language=en-US")
     suspend fun getNowPlayingMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("popular?language=pt-BR")
+    @GET("popular?language=en-US")
     suspend fun getPopularMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("top_rated?language=pt-BR")
+    @GET("top_rated?language=en-US")
     suspend fun getTopRatedMovies(@Query("page") page: Int): Response<MovieResponse>
 
-    @GET("upcoming?language=pt-BR")
+    @GET("upcoming?language=en-US")
     suspend fun getUpcomingMovies(@Query("page") page: Int): Response<MovieResponse>
 }
