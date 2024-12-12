@@ -12,7 +12,7 @@ Features
 <img src="https://github.com/alanliongar/CineNow/blob/master/Screenshot_20241212_200544.png" width=260/>
 </p>
 
-## Tecnologias
+## Technologies
 - 100% Kotlin
 - Repository Pattern: Ensures scalable and maintainable architecture for data handling
 - MVVM Architecture: Implements Model-View-ViewModel for clear separation of concerns and improved code structure
