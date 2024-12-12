@@ -1,10 +1,10 @@
 # CineNow APP
-CineNow é um aplicativo Android que permite aos usuários explorar filmes populares em tempo real, obtendo informações diretamente da API do The Movie Database (TMDB). Com uma interface amigável, os usuários podem visualizar detalhes de filmes, incluindo sinopse, data de lançamento, classificação, e muito mais.
+CineNow is an Android application that allows users to explore popular movies in real-time, retrieving information directly from The Movie Database (TMDB) API. With a user-friendly interface, users can view movie details, including synopsis, release date, rating, and much more.
 
-Funcionalidades
-- Filmes Populares: Visualize uma lista de filmes populares atualizada diariamente.
-- Detalhes do Filme: Obtenha informações detalhadas sobre cada filme, como título, sinopse, data de lançamento, classificação, e cartaz.
-- Interface Intuitiva: Navegação fácil e design limpo para uma melhor experiência do usuário.
+Features
+- Popular Movies: View a daily updated list of popular movies.
+- Movie Details: Access detailed information about each movie, such as title, synopsis, release date, rating, and poster.
+- Intuitive Interface: Enjoy easy navigation and a clean design for a seamless user experience.
 
 ## :camera_flash: Screenshots
 <!-- You can add more screenshots here if you like -->
@@ -13,6 +13,8 @@ Funcionalidades
 
 ## Tecnologias
 - 100% Kotlin
+- Repository Pattern: Ensures scalable and maintainable architecture for data handling
+- MVVM Architecture: Implements Model-View-ViewModel for clear separation of concerns and improved code structure
 - Compose
   - Column
   - Row
