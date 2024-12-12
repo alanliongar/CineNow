@@ -7,10 +7,10 @@ Features
 - Intuitive Interface: Enjoy easy navigation and a clean design for a seamless user experience.
 
 ## :camera_flash: Screenshots
-<!-- You can add more screenshots here if you like -->
+<p float="left">
 <img src="https://github.com/alanliongar/CineNow/blob/master/Screenshot_20241212_200513.png" width=260/>
 <img src="https://github.com/alanliongar/CineNow/blob/master/Screenshot_20241212_200544.png" width=260/>
-
+</p>
 
 ## Tecnologias
 - 100% Kotlin
