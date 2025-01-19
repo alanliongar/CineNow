@@ -7,11 +7,12 @@ Features
 - Intuitive Interface: Enjoy easy navigation and a clean design for a seamless user experience.
 
 ## :camera_flash: Screenshots
-<!-- You can add more screenshots here if you like -->
-<img src="https://github.com/ComunidadeDevSpace/CineNow/assets/11612508/9690f66d-fb65-4cd7-82db-954473cb6c2d" width=260/> <img src="https://github.com/ComunidadeDevSpace/CineNow/assets/11612508/f8006a40-8855-4d6f-b9b9-a44a8c991fe1" width=260/>
+<p float="left">
+<img src="https://github.com/alanliongar/CineNow/blob/master/Screenshot_20241212_200513.png" width=260/>
+<img src="https://github.com/alanliongar/CineNow/blob/master/Screenshot_20241212_200544.png" width=260/>
+</p>
 
-
-## Tecnologias
+## Technologies
 - 100% Kotlin
 - Repository Pattern: Ensures scalable and maintainable architecture for data handling
 - MVVM Architecture: Implements Model-View-ViewModel for clear separation of concerns and improved code structure
