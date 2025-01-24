@@ -9,6 +9,7 @@ import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.data.DetailService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

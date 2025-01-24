@@ -12,10 +12,19 @@ import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.net.UnknownHostException
+
+val thread = Thread{
+    runBlocking {
+        delay(1000)
+        50
+    }
+}
 
 class MovieListViewModel(
     private val repository: MovieListRepository,
@@ -101,6 +110,8 @@ class MovieListViewModel(
             }
         }
     }
+
+
 
     private fun fetchUpcomingMovies() {
         _uiUpComing.value = _uiUpComing.value.copy(isLoading = true, isError = false)

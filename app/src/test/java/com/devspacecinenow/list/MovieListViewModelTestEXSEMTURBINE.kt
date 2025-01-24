@@ -10,11 +10,14 @@ import com.devspacecinenow.list.presentation.ui.MovieUiData
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -43,7 +46,8 @@ class MovieListViewModelTestEXSEMTURBINE {
 
     @OptIn(ExperimentalCoroutinesApi::class)
 
-    private val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+    private var testDispatcher: TestDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+
 
     private val underTest by lazy {
         MovieListViewModel(repository, testDispatcher)

@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
+import kotlinx.coroutines.GlobalScope
 
 
 @Composable
@@ -44,6 +45,7 @@ fun MovieDetailScreen(
             detailViewModel.cleanMovieID()
         }
     }
+
 
     movieDto?.let {
         Column(modifier = Modifier.fillMaxSize()) {
