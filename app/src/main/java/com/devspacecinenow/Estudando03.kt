@@ -8,7 +8,7 @@ fun unicaThreadDispatcherPersonalizado(){
     runBlocking(mySingleThreadDispatcher) {
         println("Executando na thread personalizada!")
     }
-    mySingleThreadDispatcher.close()
+    //mySingleThreadDispatcher.close()
 }
 
 fun main(){
