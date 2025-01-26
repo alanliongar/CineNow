@@ -12,7 +12,6 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import org.junit.Test
-import kotlin.time.Duration.Companion.milliseconds
 
 class MovieListViewModelTestCOMTURBINE {
 
@@ -30,9 +29,36 @@ class MovieListViewModelTestCOMTURBINE {
         MovieListViewModel(repository, testDispatcher, delay = 2L)
     }
 
+    @Test
+    fun `Given fresh viewModel when collecting to nowPlaying then assert isLoading state`() {
+        //Assert values com isloading state << momento de coletar isloading
+        runTest {
+            val movies = listOf(
+                Movie(
+                    id = 1,
+                    title = "title1",
+                    overview = "1",
+                    image = "image1",
+                    category = MovieCategory.NowPlaying.name,
+                    page = 1
+                )
+            )
+            whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies))
+
+            underTest2.uiNowPlaying.test {
+                val expectedLoading = MovieListUiState( //primeira emissão de item
+                    isLoading = true
+                )
+                println("Teste01 - " + expectedLoading.toString())
+                assertEquals(expectedLoading, awaitItem())
+                //Note que aqui não é o primeiro ítem, é o segundo, pois o primeiro
+                //faria o assert do estado de loading da tela.
+            }
+        }
+    }
+
 
     //Essa é a função, e seja feliz.
-    //Aqui a emissão é de um ítem, ou seja: a tela já passou pelo estado de "isloading"
     //O que significa que estamos pegando o segundo estado dela.
     @Test
     fun `Given fresh viewModel when collecting to nowPlaying then assert expected value`() {
@@ -62,29 +88,5 @@ class MovieListViewModelTestCOMTURBINE {
         }
     }
 
-    @Test
-    fun `Given fresh viewModel when collecting to nowPlaying then assert isLoading state`() {
-        runTest {
-            val movies = listOf(
-                Movie(
-                    id = 1,
-                    title = "title1",
-                    overview = "1",
-                    image = "image1",
-                    category = MovieCategory.NowPlaying.name,
-                    page = 1
-                )
-            )
-            whenever(repository.getNowPlaying(1)).thenReturn(Result.success(movies))
 
-            underTest2.uiNowPlaying.test {
-                val expectedLoading = MovieListUiState( //primeira emissão de item
-                    isLoading = true
-                )
-                assertEquals(expectedLoading, awaitItem())
-                //Note que aqui não é o primeiro ítem, é o segundo, pois o primeiro
-                //faria o assert do estado de loading da tela.
-            }
-        }
-    }
 }

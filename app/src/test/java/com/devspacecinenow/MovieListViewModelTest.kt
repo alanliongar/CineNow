@@ -29,6 +29,38 @@ class MovieListViewModelTest {
         MovieListViewModel(repository, testDispatcher)
     }
 
+    @Test
+    fun `Given fresh viewModel When collecting to nowPlaying Then assert loading state`() {
+        runTest {
+            //Given
+            val movies = listOf(
+                Movie(
+                    id = 1,
+                    title = "title1",
+                    overview = "1",
+                    image = "image1",
+                    category = MovieCategory.NowPlaying.name,
+                    page = 1
+                )
+            )
+
+            whenever(repository.getTopRated(1)).thenReturn(Result.success(movies))
+
+            var result: MovieListUiState? = null
+
+            //When
+            backgroundScope.launch(testDispatcher) {
+                result = underTest.uiTopRated.drop(0).first()
+            }
+
+            //Then assert expected value
+            val expected = MovieListUiState(
+                isLoading = true
+            )
+            println("Valor esperado eh: " + result.toString())
+            assertEquals(expected, result)
+        }
+    }
 
 
     @Test
@@ -49,8 +81,8 @@ class MovieListViewModelTest {
             var result: MovieListUiState? = null
 
             backgroundScope.launch(testDispatcher) {
-                result = underTest.uiNowPlaying.drop(1)
-                    .first() //aqui está pegando somente o segundo cenário.
+                result = underTest.uiNowPlaying.drop(1).first()
+                //aqui está pegando somente o segundo cenário.
             }
             val expected = MovieListUiState(
                 list = listOf(
@@ -98,38 +130,6 @@ class MovieListViewModelTest {
 
             assertEquals(expected, result)
 
-        }
-    }
-
-    @Test
-    fun `Given fresh viewModel When collecting to topRated Then assert loading state`() {
-        runTest {
-            //Given
-            val movies = listOf(
-                Movie(
-                    id = 1,
-                    title = "title1",
-                    overview = "1",
-                    image = "image1",
-                    category = MovieCategory.TopRated.name,
-                    page = 1
-                )
-            )
-
-            whenever(repository.getTopRated(1)).thenReturn(Result.success(movies)) //esse é o dublê.
-
-            var result: MovieListUiState? = null
-
-            //When
-            backgroundScope.launch(testDispatcher) {
-                result = underTest.uiTopRated.drop(0).first()
-            }
-
-            //Then assert expected value
-            val expected = MovieListUiState(
-                isLoading = true
-            )
-            assertEquals(expected, result)
         }
     }
 }
