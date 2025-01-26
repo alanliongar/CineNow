@@ -16,19 +16,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.net.UnknownHostException
-
-val thread = Thread{
-    runBlocking {
-        delay(1000)
-        50
-    }
-}
 
 class MovieListViewModel(
     private val repository: MovieListRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val delay: Long = 0L
 ) : ViewModel() {
 
     private var currentPageNowPlaying: Int = 1
@@ -61,6 +54,7 @@ class MovieListViewModel(
     private fun fetchNowPlayingMovies() {
         _uiNowPlaying.value = _uiNowPlaying.value.copy(isLoading = true)
         viewModelScope.launch(dispatcher) {
+            delay(delay)
             val result = repository.getNowPlaying(currentPageNowPlaying)
             println("MovieListViewModel Result: ${result}")
             if (result.isSuccess) {
@@ -112,10 +106,10 @@ class MovieListViewModel(
     }
 
 
-
     private fun fetchUpcomingMovies() {
         _uiUpComing.value = _uiUpComing.value.copy(isLoading = true, isError = false)
         viewModelScope.launch(dispatcher) {
+            delay(delay)
             val result = repository.getUpComing(currentPageUpcoming)
             if (result.isSuccess) {
                 currentPageUpcoming++
@@ -174,6 +168,7 @@ class MovieListViewModel(
 
         _uiTopRated.value = _uiTopRated.value.copy(isLoading = true)
         viewModelScope.launch(dispatcher) {
+            delay(delay)
             val result = repository.getTopRated(currentPageTopRated)
             if (result.isSuccess) {
                 currentPageTopRated++
@@ -224,6 +219,7 @@ class MovieListViewModel(
     private fun fetchPopularMovies() {
         _uiPopular.value = _uiPopular.value.copy(isLoading = true)
         viewModelScope.launch(dispatcher) {
+            delay(delay)
             val result = repository.getPopular(currentPagePopular)
             if (result.isSuccess) {
                 currentPagePopular++
