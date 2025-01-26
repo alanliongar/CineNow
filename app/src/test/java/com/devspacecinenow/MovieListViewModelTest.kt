@@ -1,5 +1,5 @@
 package com.devspacecinenow
-
+//Sem Turbine
 import com.devspacecinenow.common.data.local.MovieCategory
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.MovieListRepository
@@ -120,7 +120,7 @@ class MovieListViewModelTest {
 
             //When
             backgroundScope.launch(testDispatcher) {
-                result = underTest.uiTopRated.first()
+                result = underTest.uiTopRated.drop(0).first()
             }
 
             //Then assert expected value
