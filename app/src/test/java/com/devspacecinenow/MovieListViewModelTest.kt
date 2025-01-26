@@ -19,8 +19,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MovieListViewModelTest {
-
-
     private val repository: MovieListRepository = mock() //mock = dado mockado, é um dublê.
 
     @OptIn(ExperimentalCoroutinesApi::class)
