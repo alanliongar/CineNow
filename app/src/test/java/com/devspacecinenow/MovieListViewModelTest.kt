@@ -30,7 +30,7 @@ class MovieListViewModelTest {
     }
 
     @Test
-    fun `Given fresh viewModel When collecting to nowPlaying Then assert loading state`() {
+    fun `Given fresh viewModel When collecting to topRated Then assert loading state`() {
         runTest {
             //Given
             val movies = listOf(

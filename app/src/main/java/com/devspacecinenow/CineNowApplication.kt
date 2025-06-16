@@ -10,7 +10,7 @@ import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 
 class CineNowApplication : Application() {
-    private val db by lazy {Room.databaseBuilder(applicationContext, CineNowDataBase::class.java, "database-cinenoww").build()}
+    private val db by lazy {Room.databaseBuilder(applicationContext, CineNowDataBase::class.java, "database-cinenowww").build()}
     private val listService by lazy { RetrofitClient.retrofitInstance.create(ListService::class.java) }
     private val localDataSource: MovieListLocalDataSource  by lazy{MovieListLocalDataSource(db.getMovieDao())}
     private val remoteDataSource: MovieListRemoteDataSource by lazy{MovieListRemoteDataSource(listService)}
