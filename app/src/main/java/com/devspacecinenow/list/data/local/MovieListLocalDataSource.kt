@@ -5,8 +5,7 @@ import com.devspacecinenow.common.data.local.MovieDao
 import com.devspacecinenow.common.data.local.MovieEntity
 import com.devspacecinenow.common.data.model.Movie
 
-class MovieListLocalDataSource(private val dao: MovieDao): LocalDataSource {
-
+class MovieListLocalDataSource(private val dao: MovieDao) : LocalDataSource {
 
     override suspend fun getNowPlayingMovies(page: Int): List<Movie> {
         return getMoviesByCategory(MovieCategory.NowPlaying, page)

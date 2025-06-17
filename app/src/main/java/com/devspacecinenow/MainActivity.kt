@@ -46,9 +46,9 @@ import retrofit2.Response
 
 
 class MainActivity : ComponentActivity() {
-    private val listViewModel by viewModels<MovieListViewModel> {
+    private val listViewModel by viewModels<MovieListViewModel>() /*{
         MovieListViewModel.Factory
-    }
+    }*/
 
     private val detailViewModel by viewModels<MovieDetailViewModel> {
         MovieDetailViewModel.Factory
@@ -70,5 +70,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//2h estudadas+2h

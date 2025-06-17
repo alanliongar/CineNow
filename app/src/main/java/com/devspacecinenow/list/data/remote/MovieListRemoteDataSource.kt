@@ -7,9 +7,8 @@ import kotlin.jvm.Throws
 
 class MovieListRemoteDataSource(
     private val listService: ListService
-) {
-    @Throws(Exception::class)
-    suspend fun getNowPlaying(page: Int): Result<List<Movie>?> {
+) : RemoteDataSource {
+    override suspend fun getNowPlaying(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getNowPlayingMovies(page)
             if (response.isSuccessful) {
@@ -33,8 +32,7 @@ class MovieListRemoteDataSource(
         }
     }
 
-    @Throws(Exception::class)
-    suspend fun getUpComing(page: Int): Result<List<Movie>?> {
+    override suspend fun getUpComing(page: Int): Result<List<Movie>?> {
         return try {
             //throw UnknownHostException()
             val response = listService.getUpcomingMovies(page)
@@ -59,8 +57,7 @@ class MovieListRemoteDataSource(
         }
     }
 
-    @Throws(Exception::class)
-    suspend fun getTopRated(page: Int): Result<List<Movie>?> {
+    override suspend fun getTopRated(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getTopRatedMovies(page)
             if (response.isSuccessful) {
@@ -84,8 +81,7 @@ class MovieListRemoteDataSource(
         }
     }
 
-    @Throws(Exception::class)
-    suspend fun getPopular(page: Int): Result<List<Movie>?> {
+    override suspend fun getPopular(page: Int): Result<List<Movie>?> {
         return try {
             val response = listService.getPopularMovies(page)
             if (response.isSuccessful) {

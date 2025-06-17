@@ -2,13 +2,14 @@ package com.devspacecinenow.list.data
 
 import com.devspacecinenow.common.data.model.Movie
 import com.devspacecinenow.list.data.local.LocalDataSource
-import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
+import com.devspacecinenow.list.data.remote.RemoteDataSource
 import okio.IOException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class MovieListRepository(
+class MovieListRepository @Inject constructor(
     private val local: LocalDataSource,
-    private val remote: MovieListRemoteDataSource,
+    private val remote: RemoteDataSource,
 ) {
     suspend fun getNowPlaying(page: Int): Result<List<Movie>?> {
         return try {

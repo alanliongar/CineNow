@@ -10,6 +10,7 @@ import com.devspacecinenow.CineNowApplication
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,8 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class MovieListViewModel(
+@HiltViewModel
+class MovieListViewModel @Inject constructor(
     private val repository: MovieListRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val delay: Long = 0L
@@ -281,7 +284,7 @@ class MovieListViewModel(
     }
 
 
-    companion object {
+    /*companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -290,5 +293,5 @@ class MovieListViewModel(
                 return MovieListViewModel(repository = (application as CineNowApplication).repository) as T
             }
         }
-    }
+    }*/
 }
