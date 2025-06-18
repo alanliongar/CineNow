@@ -26,10 +26,10 @@ Features
   - NavHostController
   - AsyncImage
 - Unit tests
-- Dependency Injection
-  - Dagger/Hilt
   - Mockito
   - Junit
+- Dependency Injection
+  - Dagger/Hilt
 - Retrofit
 - Okhttp3
 - TMDB API
