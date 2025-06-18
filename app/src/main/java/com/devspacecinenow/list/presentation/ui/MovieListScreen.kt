@@ -30,12 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.devspacecinenow.list.presentation.MovieListViewModel
 
 @Composable
-fun MovieListScreen(navController: NavHostController, viewModel: MovieListViewModel) {
+fun MovieListScreen(navController: NavHostController, viewModel: MovieListViewModel = hiltViewModel()) {
 
     val nowPlayingMovies by viewModel.uiNowPlaying.collectAsState()
     val upcomingMovies by viewModel.uiUpComing.collectAsState()

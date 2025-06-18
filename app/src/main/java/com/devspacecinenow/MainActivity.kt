@@ -47,11 +47,11 @@ import retrofit2.Response
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val listViewModel by viewModels<MovieListViewModel>() /*{
+/*    private val listViewModel by viewModels<MovieListViewModel>() *//*{
         MovieListViewModel.Factory
-    }*/
+    }*//*
 
-    private val detailViewModel by viewModels<MovieDetailViewModel>() /*{
+    private val detailViewModel by viewModels<MovieDetailViewModel>() *//*{
         MovieDetailViewModel.Factory
     }*/
 
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CineNowApp(listViewModel = listViewModel, detailViewModel = detailViewModel)
+                    CineNowApp(/*listViewModel = listViewModel, detailViewModel = detailViewModel*/)
                 }
             }
         }

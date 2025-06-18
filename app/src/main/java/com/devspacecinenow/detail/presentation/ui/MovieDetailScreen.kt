@@ -24,25 +24,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
-import kotlinx.coroutines.GlobalScope
 
 
 @Composable
 fun MovieDetailScreen(
     movieId: String,
     navHostController: NavHostController,
-    detailViewModel: MovieDetailViewModel
+    detailViewModel: MovieDetailViewModel = hiltViewModel()
 ) {
     val movieDto by detailViewModel.uiMovieDetail.collectAsState()
     detailViewModel.fetchMovieDetail(movieId)
     DisposableEffect(Unit) {
         onDispose {
-            detailViewModel.cleanMovieID()
+            //detailViewModel.cleanMovieID()
         }
     }
 
@@ -54,6 +54,7 @@ fun MovieDetailScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = {
+                    //Aqui era pra ter chamado o limpar, mas td bem, removemos ao fazer injeção de dependencias.
                     navHostController.popBackStack()
                 }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Voltar")

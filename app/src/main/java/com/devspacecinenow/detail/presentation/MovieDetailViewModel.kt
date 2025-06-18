@@ -39,12 +39,12 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
-    fun cleanMovieID() {
+    /*fun cleanMovieID() {
         viewModelScope.launch {
-            delay(1000)
-            _uiMovieDetail.value = null
+            *//*delay(1000)
+            _uiMovieDetail.value = null*//*
         }
-    }
+    }*/
 
     /*companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
