@@ -1,6 +1,5 @@
 package com.devspacecinenow.list.presentation.di
 
-import com.devspacecinenow.common.data.remote.RetrofitClient
 import com.devspacecinenow.list.data.local.LocalDataSource
 import com.devspacecinenow.list.data.local.MovieListLocalDataSource
 import com.devspacecinenow.list.data.remote.ListService

@@ -12,7 +12,6 @@ import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.list.presentation.ui.MovieListScreen
 
 
-
 @Composable
 fun CineNowApp(listViewModel: MovieListViewModel, detailViewModel: MovieDetailViewModel) {
     val navController = rememberNavController()

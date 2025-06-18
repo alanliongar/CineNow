@@ -12,7 +12,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
-import retrofit2.create
 
 @Module
 @InstallIn(SingletonComponent::class)
