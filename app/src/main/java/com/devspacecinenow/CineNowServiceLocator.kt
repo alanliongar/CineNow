@@ -10,7 +10,7 @@ import com.devspacecinenow.list.data.remote.ListService
 import com.devspacecinenow.list.data.remote.MovieListRemoteDataSource
 
 object CineNowServiceLocator {
-    fun getRepository(application: Application): MovieListRepository {
+/*    fun getRepository(application: Application): MovieListRepository {
         val db = Room.databaseBuilder(
             application.applicationContext,
             CineNowDataBase::class.java,
@@ -24,6 +24,6 @@ object CineNowServiceLocator {
         val repository: MovieListRepository =
             MovieListRepository(local = localDataSource, remote = remoteDataSource)
         return repository
-    }
+    }*/
 
 }

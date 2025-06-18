@@ -2,11 +2,8 @@ package com.devspacecinenow.list.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.devspacecinenow.CineNowApplication
+import com.devspacecinenow.di.DispatcherIO
 import com.devspacecinenow.list.data.MovieListRepository
 import com.devspacecinenow.list.presentation.ui.MovieListUiState
 import com.devspacecinenow.list.presentation.ui.MovieUiData
@@ -23,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val repository: MovieListRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    @DispatcherIO val dispatcher: CoroutineDispatcher,
     private val delay: Long = 0L
 ) : ViewModel() {
 

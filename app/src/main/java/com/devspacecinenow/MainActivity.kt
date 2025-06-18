@@ -40,11 +40,12 @@ import coil.compose.AsyncImage
 import com.devspacecinenow.detail.presentation.MovieDetailViewModel
 import com.devspacecinenow.list.presentation.MovieListViewModel
 import com.devspacecinenow.ui.theme.CineNowTheme
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val listViewModel by viewModels<MovieListViewModel>() /*{
         MovieListViewModel.Factory
