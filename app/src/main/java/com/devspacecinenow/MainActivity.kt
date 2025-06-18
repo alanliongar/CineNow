@@ -51,9 +51,9 @@ class MainActivity : ComponentActivity() {
         MovieListViewModel.Factory
     }*/
 
-    private val detailViewModel by viewModels<MovieDetailViewModel> {
+    private val detailViewModel by viewModels<MovieDetailViewModel>() /*{
         MovieDetailViewModel.Factory
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

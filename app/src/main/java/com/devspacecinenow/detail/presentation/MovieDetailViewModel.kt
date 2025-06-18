@@ -1,20 +1,16 @@
 package com.devspacecinenow.detail.presentation
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.devspacecinenow.common.data.remote.RetrofitClient
+import androidx.lifecycle.*
 import com.devspacecinenow.common.model.MovieDto
 import com.devspacecinenow.detail.data.DetailService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class MovieDetailViewModel(
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(
     private val detailService: DetailService,
 ) : ViewModel() {
     private val _uiMovieDetail = MutableStateFlow<MovieDto?>(null)
@@ -50,7 +46,7 @@ class MovieDetailViewModel(
         }
     }
 
-    companion object {
+    /*companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -59,5 +55,5 @@ class MovieDetailViewModel(
                 return MovieDetailViewModel(detailService) as T
             }
         }
-    }
+    }*/
 }
