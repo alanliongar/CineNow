@@ -32,14 +32,10 @@ class CineNowModule {
         return roomDatabase.getMovieDao()
     }
 
+
     @Provides
     fun provideRetrofit(): Retrofit {
         return RetrofitClient.retrofitInstance
-    }
-
-    @Provides
-    fun provideListService(retrofit: Retrofit): ListService {
-        return retrofit.create(ListService::class.java)
     }
 
     @Provides
