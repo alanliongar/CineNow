@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.devspacecinenow.common.data.local.CineNowDataBase
 import com.devspacecinenow.common.data.local.MovieDao
 import com.devspacecinenow.common.data.remote.RetrofitClient
-import com.devspacecinenow.list.data.remote.ListService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +30,6 @@ class CineNowModule {
     fun provideMovieDao(roomDatabase: CineNowDataBase): MovieDao {
         return roomDatabase.getMovieDao()
     }
-
 
     @Provides
     fun provideRetrofit(): Retrofit {
