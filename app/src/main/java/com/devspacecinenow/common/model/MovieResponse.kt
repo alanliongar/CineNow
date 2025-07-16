@@ -1,6 +1,7 @@
 package com.devspacecinenow.common.model
 
-@kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
+
 data class MovieResponse(
-    val results: List<MovieDto>
+    @SerializedName("results") val results: List<MovieDto>
 )

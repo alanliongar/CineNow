@@ -4,7 +4,7 @@ import com.devspacecinenow.common.model.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-/*&page={page}*/
+
 interface ListService {
     @GET("now_playing?language=en-US")
     suspend fun getNowPlayingMovies(@Query("page") page: Int): Response<MovieResponse>
