@@ -108,6 +108,7 @@ dependencies {
     implementation("androidx.room:room-guava:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
+    //Understood one part of hilt/dagger
     //Hilt
     val hilt_version = "2.48"
     implementation("com.google.dagger:hilt-android:$hilt_version")
